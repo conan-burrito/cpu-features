@@ -20,10 +20,12 @@ class Recipe(ConanFile):
     def _source_subfolder(self):
         return "src"
 
-    def configure(self):
-        if self.options.shared:
+    def config_options(self):
+        if self.settings.os == "Windows":
             del self.options.fPIC
 
+    def configure(self):
+        # It's a C project - remove irrelevant settings
         del self.settings.compiler.libcxx
         del self.settings.compiler.cppstd
 
@@ -38,6 +40,8 @@ class Recipe(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.configure(source_folder=self._source_subfolder)
+        cmake.definitions['BUILD_PIC'] = 'ON' if self.options.fPIC else 'OFF'
+
         cmake.build()
         cmake.install()
 
@@ -48,5 +52,5 @@ class Recipe(ConanFile):
         self.cpp_info.libs = ['cpu_features']
         if self.settings.os == 'Android':
             self.cpp_info.libs.append('ndk_compat')
-            
+
         self.cpp_info.includedirs = ['include', os.path.join('include', 'ndk_compat')]
