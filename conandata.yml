@@ -1,0 +1,8 @@
+sources:
+  "0.4.1":
+    url: "https://github.com/google/cpu_features/archive/v0.4.1.tar.gz"
+    sha256: "b7b6b27f759410f73f15f935ae646f30c9c6742731dc354416399677bd418156"
+patches:
+  "0.4.1":
+    - patch_file: "patches/0001-fix-arm-vfpv.diff"
+      base_path: "src"
