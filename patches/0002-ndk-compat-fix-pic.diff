@@ -1,0 +1,13 @@
+diff --git a/./ndk_compat/CMakeLists.txt b/./ndk_compat/CMakeLists.txt
+index d95e523..dc1ae82 100644
+--- a/./ndk_compat/CMakeLists.txt
++++ b/./ndk_compat/CMakeLists.txt
+@@ -17,6 +17,8 @@ add_library(ndk_compat ${NDK_COMPAT_HDRS} ${NDK_COMPAT_SRCS})
+ setup_include_and_definitions(ndk_compat)
+ target_link_libraries(ndk_compat PUBLIC ${CMAKE_DL_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+ set_target_properties(ndk_compat PROPERTIES PUBLIC_HEADER "${NDK_COMPAT_HDRS}")
++set_property(TARGET ndk_compat PROPERTY POSITION_INDEPENDENT_CODE ${BUILD_PIC})
++
+ 
+ include(GNUInstallDirs)
+ install(TARGETS ndk_compat

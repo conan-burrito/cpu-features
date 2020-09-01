@@ -6,3 +6,5 @@ patches:
   "0.4.1":
     - patch_file: "patches/0001-fix-arm-vfpv.diff"
       base_path: "src"
+    - patch_file: "patches/0002-ndk-compat-fix-pic.diff"
+      base_path: "src"

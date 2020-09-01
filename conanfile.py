@@ -39,10 +39,12 @@ class Recipe(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.configure(source_folder=self._source_subfolder)
+
         is_pic = self.options.get_safe("fPIC")
+        self.output.info('PIC: %s' % is_pic)
         cmake.definitions['BUILD_PIC'] = 'ON' if is_pic else 'OFF'
 
+        cmake.configure(source_folder=self._source_subfolder)
         cmake.build()
         cmake.install()
 
