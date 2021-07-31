@@ -1,25 +1,50 @@
-#include <iostream>
 #include <cpu_features/cpu_features_macros.h>
-
-#ifdef CPU_FEATURES_OS_ANDROID
-   #include <cpu-features.h>
-
-   static const uint64_t features = android_getCpuFeatures();
-   static const bool has_neon = (features & ANDROID_CPU_ARM_FEATURE_NEON) == ANDROID_CPU_ARM_FEATURE_NEON;
-   static const bool has_feature = has_neon;
-#else
-   #include <cpu_features/cpuinfo_x86.h>
-   using namespace cpu_features;
-
-   static const X86Info info = GetX86Info();
-   static const X86Microarchitecture uarch = GetX86Microarchitecture(&info);
-   static const bool has_fast_avx = info.features.avx && uarch != INTEL_SNB;
-   static const bool has_feature = has_fast_avx;
+#if defined(CPU_FEATURES_ARCH_X86)
+#include <cpu_features/cpuinfo_x86.h>
+#elif defined(CPU_FEATURES_OS_ANDROID)
+#include <cpu-features.h>
+#elif defined(CPU_FEATURES_ARCH_ARM)
+#include <cpu_features/cpuinfo_arm.h>
+#elif defined(CPU_FEATURES_ARCH_AARCH64)
+#include <cpu_features/cpuinfo_aarch64.h>
+#elif defined(CPU_FEATURES_ARCH_MIPS)
+#include <cpu_features/cpuinfo_mips.h>
+#elif defined(CPU_FEATURES_ARCH_PPC)
+#include <cpu_features/ccpuinfo_ppc.h>
 #endif
 
+#include <stdlib.h>
+#include <stdio.h>
+
+#if !defined(CPU_FEATURES_OS_ANDROID)
+using namespace cpu_features;
+#endif
 
 // use has_fast_avx.
 int main() {
-   std::cout << "Feature: " << has_feature << std::endl;
-   return 0;
+#if defined(CPU_FEATURES_ARCH_X86)
+    X86Features features = GetX86Info().features;
+#elif defined(CPU_FEATURES_OS_ANDROID)
+    uint64_t features = android_getCpuFeatures();
+#elif defined(CPU_FEATURES_ARCH_ARM)
+    ArmFeatures features = GetArmInfo().features;
+#elif defined(CPU_FEATURES_ARCH_AARCH64)
+    Aarch64Features features = GetAarch64Info().features;
+#elif defined(CPU_FEATURES_ARCH_MIPS)
+    MipsFeatures features = GetMipsInfo().features;
+#elif defined(CPU_FEATURES_ARCH_PPC)
+    PPCFeatures features = GetPPCInfo().features;
+#endif
+
+#if defined(CPU_FEATURES_OS_ANDROID)
+    printf("NEON is%s available\n", (features & ANDROID_CPU_ARM_FEATURE_NEON) ? "" : "n't");
+#elif defined(CPU_FEATURES_ARCH_X86) || defined(CPU_FEATURES_ARCH_ARM) || defined(CPU_FEATURES_ARCH_AARCH64)
+    printf("AES is%s available\n", features.aes ? "" : "n't");
+#elif defined(CPU_FEATURES_ARCH_MIPS)
+    printf("EVA is%s available\n", features.eva ? "" : "n't");
+#elif defined(CPU_FEATURES_ARCH_PPC)
+    printf("SPE is%s available\n", features.spe ? "" : "n't");
+#endif
+
+   return EXIT_SUCCESS;
 }

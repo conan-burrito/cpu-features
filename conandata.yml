@@ -1,10 +1,10 @@
 sources:
-  "0.4.1":
-    url: "https://github.com/google/cpu_features/archive/v0.4.1.tar.gz"
-    sha256: "b7b6b27f759410f73f15f935ae646f30c9c6742731dc354416399677bd418156"
+  "0.6.0":
+    url: "https://github.com/google/cpu_features/archive/refs/tags/v0.6.0.tar.gz"
+    sha256: "95a1cf6f24948031df114798a97eea2a71143bd38a4d07d9a758dda3924c1932"
 patches:
-  "0.4.1":
-    - patch_file: "patches/0001-fix-arm-vfpv.diff"
-      base_path: "src"
+  "0.6.0":
     - patch_file: "patches/0002-ndk-compat-fix-pic.diff"
+      base_path: "src"
+    - patch_file: "patches/0003-fix-bundle-install.patch"
       base_path: "src"
