@@ -1,8 +1,8 @@
 #include <cpu_features/cpu_features_macros.h>
-#if defined(CPU_FEATURES_ARCH_X86)
-#include <cpu_features/cpuinfo_x86.h>
-#elif defined(CPU_FEATURES_OS_ANDROID)
+#if defined(CPU_FEATURES_OS_ANDROID)
 #include <cpu-features.h>
+#elif defined(CPU_FEATURES_ARCH_X86)
+#include <cpu_features/cpuinfo_x86.h>
 #elif defined(CPU_FEATURES_ARCH_ARM)
 #include <cpu_features/cpuinfo_arm.h>
 #elif defined(CPU_FEATURES_ARCH_AARCH64)
@@ -22,10 +22,10 @@ using namespace cpu_features;
 
 // use has_fast_avx.
 int main() {
-#if defined(CPU_FEATURES_ARCH_X86)
-    X86Features features = GetX86Info().features;
-#elif defined(CPU_FEATURES_OS_ANDROID)
+#if defined(CPU_FEATURES_OS_ANDROID)
     uint64_t features = android_getCpuFeatures();
+#elif defined(CPU_FEATURES_ARCH_X86)
+    X86Features features = GetX86Info().features;
 #elif defined(CPU_FEATURES_ARCH_ARM)
     ArmFeatures features = GetArmInfo().features;
 #elif defined(CPU_FEATURES_ARCH_AARCH64)
